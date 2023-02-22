@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibroMind-BE.API", "LibroMind-BE.API\LibroMind-BE.API.csproj", "{C2DD67C8-1796-451C-8E65-4610D2CF4244}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibroMind-BE.DAL", "LibroMind-BE.DAL\LibroMind-BE.DAL.csproj", "{9A91088A-77C0-4E5C-912C-31C1F8BECC59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibroMind-BE.Services", "LibroMind-BE.Services\LibroMind-BE.Services.csproj", "{8F718DD9-59E6-4730-86E2-7396EF409ABD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibroMind-BE.Common", "LibroMind-BE.Common\LibroMind-BE.Common.csproj", "{0EE850D2-9D28-4810-A57D-39105D5EEE86}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C2DD67C8-1796-451C-8E65-4610D2CF4244}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2DD67C8-1796-451C-8E65-4610D2CF4244}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2DD67C8-1796-451C-8E65-4610D2CF4244}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2DD67C8-1796-451C-8E65-4610D2CF4244}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A91088A-77C0-4E5C-912C-31C1F8BECC59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A91088A-77C0-4E5C-912C-31C1F8BECC59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A91088A-77C0-4E5C-912C-31C1F8BECC59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A91088A-77C0-4E5C-912C-31C1F8BECC59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F718DD9-59E6-4730-86E2-7396EF409ABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F718DD9-59E6-4730-86E2-7396EF409ABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F718DD9-59E6-4730-86E2-7396EF409ABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F718DD9-59E6-4730-86E2-7396EF409ABD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EE850D2-9D28-4810-A57D-39105D5EEE86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EE850D2-9D28-4810-A57D-39105D5EEE86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EE850D2-9D28-4810-A57D-39105D5EEE86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EE850D2-9D28-4810-A57D-39105D5EEE86}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {49B19D8F-5F41-4ABE-835D-C97D95C71EEE}
+	EndGlobalSection
+EndGlobal

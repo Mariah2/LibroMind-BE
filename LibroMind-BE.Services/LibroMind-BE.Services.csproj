@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>LibroMind_BE.Services</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LibroMind-BE.Common\LibroMind-BE.Common.csproj" />
+    <ProjectReference Include="..\LibroMind-BE.DAL\LibroMind-BE.DAL.csproj" />
+  </ItemGroup>
+
+</Project>
