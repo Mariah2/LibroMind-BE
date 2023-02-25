@@ -4,7 +4,7 @@ namespace LibroMind_BE.DAL.Repositories.Interfaces
 {
     public interface IBaseRepository<TEntity> where TEntity: class
     {
-        Task<TEntity> FindByIdAsync(int id);
+        Task<TEntity?> FindByIdAsync(int id);
 
         Task<IEnumerable<TEntity>> FindAllAsync();
 

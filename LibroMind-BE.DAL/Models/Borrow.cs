@@ -13,6 +13,8 @@ public partial class Borrow
 
     public DateTime BorrowingDate { get; set; }
 
+    public DateTime ReturnDate { get; set; }
+
     public bool HasReturnedBook { get; set; }
 
     public virtual BookLibrary BookLibrary { get; set; } = null!;

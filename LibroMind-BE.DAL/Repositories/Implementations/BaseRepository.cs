@@ -36,7 +36,7 @@ namespace LibroMind_BE.DAL.Repositories.Implementations
             return await _dbContext.Set<TEntity>().Where(predicate).ToListAsync();
         }
 
-        public async Task<TEntity> FindByIdAsync(int id)
+        public async Task<TEntity?> FindByIdAsync(int id)
         {
             return await _dbContext.Set<TEntity>().FindAsync(id);
         }

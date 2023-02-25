@@ -15,8 +15,6 @@ public partial class Book
 
     public DateTime PublishingDate { get; set; }
 
-    public DateTime AddedDate { get; set; }
-
     public string Description { get; set; } = null!;
 
     public int PagesNumber { get; set; }

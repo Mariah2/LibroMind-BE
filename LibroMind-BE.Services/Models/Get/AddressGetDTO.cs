@@ -1,6 +1,6 @@
-﻿namespace LibroMind_BE.API.Models
+﻿namespace LibroMind_BE.Services.Models
 {
-    public class AddressDTO
+    public class AddressGetDTO
     {
         public int Id { get; set; }
 

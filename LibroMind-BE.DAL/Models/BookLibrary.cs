@@ -13,6 +13,8 @@ public partial class BookLibrary
 
     public int Quantity { get; set; }
 
+    public DateTime AddedDate { get; set; }
+
     public virtual Book Book { get; set; } = null!;
 
     public virtual ICollection<Borrow> Borrows { get; } = new List<Borrow>();
