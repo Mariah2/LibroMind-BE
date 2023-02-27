@@ -6,8 +6,8 @@ namespace LibroMind_BE.Services.Interfaces
     {
         public Task<IEnumerable<BookGetDTO>> FindBookesAsync();
         public Task<BookGetDTO> FindBookByIdAsync(int id);
-        public Task AddBook(BookPostDTO BookToAdd);
-        public Task UpdateBook(int id, BookPostDTO BookToUpdate);
+        public Task AddBook(BookPostDTO bookToAdd);
+        public Task UpdateBook(int id, BookPostDTO bookToUpdate);
         public Task DeleteBook(int id);
     }
 }

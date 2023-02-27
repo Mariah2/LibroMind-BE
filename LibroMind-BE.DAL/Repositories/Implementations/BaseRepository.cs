@@ -7,16 +7,16 @@ namespace LibroMind_BE.DAL.Repositories.Implementations
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        protected LibroMindContext _dbContext { get; set; }
+        protected LibroMindContext _context { get; set; }
 
-        public BaseRepository(LibroMindContext dbContext)
+        public BaseRepository(LibroMindContext context)
         {
-            _dbContext = dbContext;
+            _context = context;
         }
 
         public async Task<IEnumerable<TEntity>> FindAllAsync()
         {
-            return await _dbContext.Set<TEntity>().ToListAsync();
+            return await _context.Set<TEntity>().ToListAsync();
         }
 
         public async Task<IEnumerable<TEntity>> FindAllPaginatedAsync(int pageSize, int pageNumber)
@@ -28,52 +28,52 @@ namespace LibroMind_BE.DAL.Repositories.Implementations
                 skip = ( pageNumber - 1 ) * pageSize;
             }
             
-            return await _dbContext.Set<TEntity>().Skip(skip).Take(pageSize).ToListAsync();
+            return await _context.Set<TEntity>().Skip(skip).Take(pageSize).ToListAsync();
         }
 
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbContext.Set<TEntity>().Where(predicate).ToListAsync();
+            return await _context.Set<TEntity>().Where(predicate).ToListAsync();
         }
 
         public async Task<TEntity?> FindByIdAsync(int id)
         {
-            return await _dbContext.Set<TEntity>().FindAsync(id);
+            return await _context.Set<TEntity>().FindAsync(id);
         }
 
         public void Add(TEntity entity)
         {
-            _dbContext.Set<TEntity>().Add(entity).State = EntityState.Added;
+            _context.Set<TEntity>().Add(entity).State = EntityState.Added;
         }
 
         public void AddRange(IEnumerable<TEntity> entities)
         {
-            _dbContext.Set<TEntity>().AddRange(entities);
+            _context.Set<TEntity>().AddRange(entities);
         }
 
         public void Remove(TEntity entity)
         {
-            _dbContext.Set<TEntity>().Remove(entity).State = EntityState.Deleted;
+            _context.Set<TEntity>().Remove(entity).State = EntityState.Deleted;
         }
 
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
-            _dbContext.Set<TEntity>().RemoveRange(entities);
+            _context.Set<TEntity>().RemoveRange(entities);
         }
 
         public void Update(TEntity entity)
         {
-            _dbContext.Set<TEntity>().Update(entity).State = EntityState.Modified;
+            _context.Set<TEntity>().Update(entity).State = EntityState.Modified;
         }
 
         public void UpdateRange(IEnumerable<TEntity> entities)
         {
-            _dbContext.Set<TEntity>().UpdateRange(entities);
+            _context.Set<TEntity>().UpdateRange(entities);
         }
 
         public async Task<int> CountAsync()
         {
-            return await _dbContext.Set<TEntity>().CountAsync();
+            return await _context.Set<TEntity>().CountAsync();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using LibroMind_BE.Services.Interfaces;
+﻿using FluentValidation;
+using LibroMind_BE.API.Validations;
+using LibroMind_BE.Services.Interfaces;
 using LibroMind_BE.Services.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,43 +10,39 @@ namespace LibroMind_BE.API.Controllers
     [ApiController]
     public class AddressController : ControllerBase
     {
+        private readonly IValidator<AddressPostDTO> _validator;
         private readonly IAddressService _addressService;
 
-        public AddressController(IAddressService addressService)
+        public AddressController(IValidator<AddressPostDTO> validator, IAddressService addressService)
         {
+            _validator = validator;
             _addressService = addressService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAddresses()
         {
-            var response = await _addressService.FindAddressesAsync();
-
-            return Ok(response);
+            return Ok(await _addressService.FindAddressesAsync());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAddress(int id)
         {
-            try
-            {
-                var response = await _addressService.FindAddressByIdAsync(id);
-
-                return Ok(response);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return Ok(await _addressService.FindAddressByIdAsync(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> PostAddress(AddressPostDTO addressToAdd)
         {
+            var validationResult = await _validator.ValidateAsync(addressToAdd);
+
+            if (!validationResult.IsValid)
+            {
+                throw new BadHttpRequestException(
+                    "One or more validation errors occured",
+                    new ValidationException(validationResult.Errors));
+            }
+
             await _addressService.AddAddress(addressToAdd);
 
             return Ok("Address was added successfully!");
@@ -53,39 +51,26 @@ namespace LibroMind_BE.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAddress(int id, AddressPostDTO addressToUpdate)
         {
-            try
-            {
-                await _addressService.UpdateAddress(id, addressToUpdate);
+            var validationResult = await _validator.ValidateAsync(addressToUpdate);
 
-                return Ok("Address was updated successfully!");
-            }
-            catch (ArgumentNullException ex)
+            if (!validationResult.IsValid)
             {
-                return NotFound(ex.Message);
+                throw new BadHttpRequestException(
+                    "One or more validation errors occured",
+                    new ValidationException(validationResult.Errors));
             }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+
+            await _addressService.UpdateAddress(id, addressToUpdate);
+
+            return Ok("Address was updated successfully!");
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAddress(int id)
         {
-            try
-            {
-                await _addressService.DeleteAddress(id);
+            await _addressService.DeleteAddress(id);
 
-                return Ok("Address was deleted successfully!");
-            }
-            catch (ArgumentNullException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return Ok("Address was deleted successfully!");
         }
     }
 }

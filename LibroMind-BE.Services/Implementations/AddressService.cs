@@ -3,6 +3,7 @@ using LibroMind_BE.DAL.Models;
 using LibroMind_BE.DAL.UnitOfWork;
 using LibroMind_BE.Services.Interfaces;
 using LibroMind_BE.Services.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace LibroMind_BE.Services.Implementations
 {
@@ -28,7 +29,7 @@ namespace LibroMind_BE.Services.Implementations
 
             if (existingAddress is null)
             {
-                throw new ArgumentNullException("Address not found!");
+                throw new BadHttpRequestException("Address not found", StatusCodes.Status404NotFound);
             }
 
             return _mapper.Map<AddressGetDTO>(existingAddress);
@@ -49,7 +50,7 @@ namespace LibroMind_BE.Services.Implementations
 
             if (existingAddress is null)
             {
-                throw new ArgumentNullException("Address not found!");
+                throw new BadHttpRequestException("Address not found", StatusCodes.Status404NotFound);
             }
 
             _mapper.Map(addressToUpdate, existingAddress);
@@ -65,7 +66,7 @@ namespace LibroMind_BE.Services.Implementations
 
             if (existingAddress is null)
             {
-                throw new ArgumentNullException("Address not found!");
+                throw new BadHttpRequestException("Address not found", StatusCodes.Status404NotFound);
             }
 
             _unitOfWork.AddressRepository.Remove(existingAddress);
