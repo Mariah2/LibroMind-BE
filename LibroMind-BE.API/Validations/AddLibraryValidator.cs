@@ -8,9 +8,10 @@ namespace LibroMind_BE.API.Validations
         public AddLibraryValidator() 
         {
             RuleFor(library => library.AddressId)
-                .NotEmpty().WithMessage("{PropertyName} is required.");
+                .NotEmpty();
+
             RuleFor(library => library.Name)
-                .NotEmpty().WithMessage("{PropertyName} is required.");
+                .NotEmpty();
         }
     }
 }

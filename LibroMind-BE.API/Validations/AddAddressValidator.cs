@@ -25,13 +25,16 @@ namespace LibroMind_BE.API.Validations
                     .WithMessage("{PropertyName} must be a positive number.");
 
             RuleFor(address => address.City)
-                .NotEmpty();
+                .NotEmpty()
+                .Matches("/^[A-Z]{1}[a-z ,.'-]+$/i").WithMessage("Please use only letters for your {PropertyName}");
 
             RuleFor(address => address.County)
-                .NotEmpty();
+                .NotEmpty()
+                .Matches("/^[A-Z]{1}[a-z ,.'-]+$/i").WithMessage("Please use only letters for your {PropertyName}");
 
             RuleFor(address => address.Country)
-                .NotEmpty();
+                .NotEmpty()
+                .Matches("/^[A-Z]{1}[a-z ,.'-]+$/i").WithMessage("Please use only letters for your {PropertyName}");
         }
     }
 }

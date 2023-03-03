@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
-using LibroMind_BE.API.Validations;
 using LibroMind_BE.Services.Interfaces;
 using LibroMind_BE.Services.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibroMind_BE.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AddressController : ControllerBase

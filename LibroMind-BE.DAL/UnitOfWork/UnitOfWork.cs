@@ -19,6 +19,7 @@ namespace LibroMind_BE.DAL.UnitOfWork
         private IPublisherRepository? _publisherRepository;
         private IRoleRepository? _roleRepository;
         private IUserRepository? _userRepository;
+        private IReviewRepository? _reviewRepository;
 
         public UnitOfWork(LibroMindContext context)
         {
@@ -47,6 +48,8 @@ namespace LibroMind_BE.DAL.UnitOfWork
             => _roleRepository ??= new RoleRepository(_context);
         public IUserRepository UserRepository
             => _userRepository ??= new UserRepository(_context);
+        public IReviewRepository ReviewRepository
+            => _reviewRepository ??= new ReviewRepository(_context);
 
         public void Commit()
         {

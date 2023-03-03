@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using LibroMind_BE.API.Validations;
 using LibroMind_BE.Services.Interfaces;
 using LibroMind_BE.Services.Models;
 using Microsoft.AspNetCore.Mvc;

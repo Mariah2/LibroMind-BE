@@ -15,7 +15,7 @@ namespace LibroMind_BE.API.Validations
 
             RuleFor(bookLibrary => bookLibrary.Quantity)
                 .NotEmpty()
-                .GreaterThan(1);
+                .GreaterThanOrEqualTo(0);
         }
     }
 }

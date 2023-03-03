@@ -1,6 +1,5 @@
 global using Microsoft.EntityFrameworkCore;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using LibroMind_BE.API.Common;
 using LibroMind_BE.API.Validations;
 using LibroMind_BE.Common.DateTimeProvider;
@@ -11,8 +10,10 @@ using LibroMind_BE.DAL.UnitOfWork;
 using LibroMind_BE.Services.Implementations;
 using LibroMind_BE.Services.Interfaces;
 using LibroMind_BE.Services.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using System.Reflection;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +39,10 @@ builder.Services
     .AddScoped<IValidator<BookLibraryPutDTO>, UpdateBookLibraryValidator>()
     .AddScoped<IValidator<BookPostDTO>, AddBookValidator>()
     .AddScoped<IValidator<BookCategoryPostDTO>, AddBookCategoryValidator>()
-    .AddScoped<IValidator<CategoryPostDTO>, AddCategoryValidator>();
+    .AddScoped<IValidator<CategoryPostDTO>, AddCategoryValidator>()
+    .AddScoped<IValidator<ReviewPostDTO>, AddReviewValidator>()
+    .AddScoped<IValidator<ReviewPutDTO>, UpdateReviewValidator>();
+
 
 builder.Services.AddSingleton<ProblemDetailsFactory, LibroMindProblemDetailsFactory>();
 
@@ -61,9 +65,76 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Register Repositories
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IBookCategoryRepository, BookCategoryRepository>();
+builder.Services.AddScoped<IBookLibraryRepository, BookLibraryRepository>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IBorrowRepository, BorrowRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
+builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
 
 // Register Services
 builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IBookCategoryService, BookCategoryService>();
+builder.Services.AddScoped<IBookLibraryService, BookLibraryService>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IBorrowService, BorrowService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ILibraryService, LibraryService>();
+builder.Services.AddScoped<IPublisherService, PublisherService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    System.Text.Encoding.UTF8.GetBytes("my-top-secret-key"))
+            });
+
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen(option =>
+{
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "LibroMind API", Version = "v1" });
+
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 var app = builder.Build();
 {
@@ -79,7 +150,7 @@ var app = builder.Build();
     }
 
     app.UseHttpsRedirection();
-    //app.UseAuthentication();
+    app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
     app.Run();

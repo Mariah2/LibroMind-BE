@@ -73,7 +73,9 @@ namespace LibroMind_BE.API.Controllers
         [HttpPut("{id}/extend")]
         public async Task<IActionResult> ExtendBorrow(int id)
         {
+            await _borrowService.ExtendBorrow(id);
 
+            return Ok("Borrow was extended successfully!");
         }
 
         [HttpDelete("{id}")]

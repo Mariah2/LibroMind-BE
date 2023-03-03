@@ -2,5 +2,9 @@
 
 namespace LibroMind_BE.DAL.Repositories.Interfaces
 {
-    public interface IUserRepository : IBaseRepository<User> { }
+    public interface IUserRepository : IBaseRepository<User> 
+    {
+        public Task<User?> GetUserByEmailAsync(string email);
+    }
+    
 }

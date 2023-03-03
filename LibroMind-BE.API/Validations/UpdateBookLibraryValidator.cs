@@ -5,6 +5,11 @@ namespace LibroMind_BE.API.Validations
 {
     public class UpdateBookLibraryValidator : AbstractValidator<BookLibraryPutDTO>
     {
-        public UpdateBookLibraryValidator() { }
+        public UpdateBookLibraryValidator() 
+        {
+            RuleFor(bookLibrary => bookLibrary.Quantity)
+                .NotEmpty()
+                .GreaterThanOrEqualTo(0);
+        }
     }
 }

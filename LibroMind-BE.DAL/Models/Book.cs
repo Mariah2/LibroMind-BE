@@ -28,4 +28,6 @@ public partial class Book
     public virtual ICollection<BookLibrary> BookLibraries { get; } = new List<BookLibrary>();
 
     public virtual Publisher Publisher { get; set; } = null!;
+
+    public virtual ICollection<Review> Reviews { get; } = new List<Review>();
 }

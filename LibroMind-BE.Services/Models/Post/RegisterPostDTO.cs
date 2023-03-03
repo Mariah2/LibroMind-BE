@@ -1,6 +1,6 @@
-﻿namespace LibroMind_BE.Services.Models
+﻿namespace LibroMind_BE.Services.Models.Post
 {
-    public class UserPostDTO
+    public class RegisterPostDTO
     {
         public int? AddressId { get; set; }
 
@@ -14,8 +14,6 @@
 
         public string Phone { get; set; } = null!;
 
-        public byte[] Password { get; set; } = null!;
-
-        public byte[] Salt { get; set; } = null!;
+        public string Password { get; set; } = null!;
     }
 }

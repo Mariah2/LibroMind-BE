@@ -21,13 +21,15 @@ public partial class User
 
     public string Phone { get; set; } = null!;
 
-    public string Password { get; set; } = null!;
+    public byte[] Password { get; set; } = null!;
 
-    public string Salt { get; set; } = null!;
+    public byte[] Salt { get; set; } = null!;
 
     public virtual Address? Address { get; set; }
 
     public virtual ICollection<Borrow> Borrows { get; } = new List<Borrow>();
+
+    public virtual ICollection<Review> Reviews { get; } = new List<Review>();
 
     public virtual Role Role { get; set; } = null!;
 }

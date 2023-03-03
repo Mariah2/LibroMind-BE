@@ -8,7 +8,8 @@ namespace LibroMind_BE.API.Validations
         public AddCategoryValidator() 
         {
             RuleFor(category => category.Name)
-                .NotEmpty().WithMessage("{PropertyName} is required.");
+                .NotEmpty()
+                .Matches("/^[A-Z]{1}[a-z ,.'-]+$/i").WithMessage("Please use only letters for your {PropertyName}");
         }
     }
 }

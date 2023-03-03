@@ -33,12 +33,13 @@ public partial class LibroMindContext : DbContext
 
     public virtual DbSet<Publisher> Publishers { get; set; }
 
+    public virtual DbSet<Review> Reviews { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=MARIA;Database=LibroMind;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -154,6 +155,23 @@ public partial class LibroMindContext : DbContext
         modelBuilder.Entity<Publisher>(entity =>
         {
             entity.ToTable("Publisher");
+        });
+
+        modelBuilder.Entity<Review>(entity =>
+        {
+            entity.ToTable("Review");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Book).WithMany(p => p.Reviews)
+                .HasForeignKey(d => d.BookId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Review_Book1");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Reviews)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Review_User1");
         });
 
         modelBuilder.Entity<Role>(entity =>

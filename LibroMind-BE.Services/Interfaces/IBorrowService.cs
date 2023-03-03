@@ -9,5 +9,6 @@ namespace LibroMind_BE.Services.Interfaces
         public Task AddBorrow(BorrowPostDTO borrowToAdd);
         public Task UpdateBorrow(int id, BorrowPutDTO borrowToUpdate);
         public Task DeleteBorrow(int id);
+        public Task ExtendBorrow(int id);
     }
 }

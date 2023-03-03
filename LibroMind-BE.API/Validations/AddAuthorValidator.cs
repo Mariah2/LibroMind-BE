@@ -14,11 +14,11 @@ namespace LibroMind_BE.API.Validations
 
             RuleFor(author => author.FirstName)
                 .NotEmpty()
-                .Matches("/^[a-z ,.'-]+$/i").WithMessage("Please use only letters for your {PropertyName}");
+                .Matches("/^[A-Z]{1}[a-z ,.'-]+$/i").WithMessage("Please use only letters for your {PropertyName}");
 
             RuleFor(author => author.LastName)
                 .NotEmpty()
-                .Matches("/^[a-z ,.'-]+$/i").WithMessage("Please use only letters for your {PropertyName}");
+                .Matches("/^[A-Z]{1}[a-z ,.'-]+$/i").WithMessage("Please use only letters for your {PropertyName}");
 
             RuleFor(author => author.BirthDate)
                 .NotEmpty()

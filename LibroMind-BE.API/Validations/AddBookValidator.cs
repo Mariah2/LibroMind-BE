@@ -19,7 +19,8 @@ namespace LibroMind_BE.API.Validations
                 .NotEmpty();
 
             RuleFor(book => book.Title)
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(64);
 
             RuleFor(book => book.PublishingDate)
                 .NotEmpty()

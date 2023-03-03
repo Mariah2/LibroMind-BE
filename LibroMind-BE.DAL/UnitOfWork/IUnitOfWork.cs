@@ -15,6 +15,7 @@ namespace LibroMind_BE.DAL.UnitOfWork
         IPublisherRepository PublisherRepository { get; }
         IRoleRepository RoleRepository { get; }
         IUserRepository UserRepository { get; }
+        IReviewRepository ReviewRepository { get; }
 
         void Commit();
         Task CommitAsync();
