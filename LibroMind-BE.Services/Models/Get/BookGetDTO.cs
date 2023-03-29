@@ -17,5 +17,7 @@
         public int PagesNumber { get; set; }
 
         public string? CoverUrl { get; set; }
+
+        public double Rating { get; set; }
     }
 }

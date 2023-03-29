@@ -1,4 +1,5 @@
 ﻿using LibroMind_BE.Services.Models;
+using LibroMind_BE.Services.Models.Put;
 
 namespace LibroMind_BE.Services.Interfaces
 {
@@ -6,8 +7,7 @@ namespace LibroMind_BE.Services.Interfaces
     {
         public Task<IEnumerable<UserGetDTO>> FindUseresAsync();
         public Task<UserGetDTO> FindUserByIdAsync(int id);
-        public Task AddUser(UserPostDTO userToAdd);
-        public Task UpdateUser(int id, UserPostDTO userToUpdate);
+        public Task UpdateUser(int id, UserPutDTO userToUpdate);
         public Task DeleteUser(int id);
     }
 }

@@ -25,5 +25,7 @@ namespace LibroMind_BE.DAL.Repositories.Interfaces
         void RemoveRange(IEnumerable<TEntity> entities);
 
         Task<int> CountAsync();
+
+        Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
     }
 }

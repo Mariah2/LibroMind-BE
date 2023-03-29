@@ -75,5 +75,10 @@ namespace LibroMind_BE.DAL.Repositories.Implementations
         {
             return await _context.Set<TEntity>().CountAsync();
         }
+
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _context.Set<TEntity>().Where(predicate).CountAsync();
+        }
     }
 }

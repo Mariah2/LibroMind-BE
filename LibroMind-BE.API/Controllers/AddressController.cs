@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibroMind_BE.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AddressController : ControllerBase

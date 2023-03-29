@@ -25,6 +25,8 @@ public partial class LibroMindContext : DbContext
 
     public virtual DbSet<BookLibrary> BookLibraries { get; set; }
 
+    public virtual DbSet<BookUser> BookUsers { get; set; }
+
     public virtual DbSet<Borrow> Borrows { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
@@ -115,6 +117,23 @@ public partial class LibroMindContext : DbContext
                 .HasConstraintName("FK_BookLibrary_Library");
         });
 
+        modelBuilder.Entity<BookUser>(entity =>
+        {
+            entity.ToTable("BookUser");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Book).WithMany(p => p.BookUsers)
+                .HasForeignKey(d => d.BookId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_BookUser_Book");
+
+            entity.HasOne(d => d.User).WithMany(p => p.BookUsers)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_BookUser_User");
+        });
+
         modelBuilder.Entity<Borrow>(entity =>
         {
             entity.ToTable("Borrow");
@@ -161,8 +180,6 @@ public partial class LibroMindContext : DbContext
         {
             entity.ToTable("Review");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
-
             entity.HasOne(d => d.Book).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.BookId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -193,6 +210,10 @@ public partial class LibroMindContext : DbContext
             entity.HasOne(d => d.Address).WithMany(p => p.Users)
                 .HasForeignKey(d => d.AddressId)
                 .HasConstraintName("FK_User_Address");
+
+            entity.HasOne(d => d.Library).WithMany(p => p.Users)
+                .HasForeignKey(d => d.LibraryId)
+                .HasConstraintName("FK_User_Library");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)

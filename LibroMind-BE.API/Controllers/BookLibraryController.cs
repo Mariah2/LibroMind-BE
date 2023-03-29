@@ -25,9 +25,9 @@ namespace LibroMind_BE.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBookLibraryes()
+        public async Task<IActionResult> GetBookLibraries()
         {
-            return Ok(await _bookLibraryService.FindBookLibraryesAsync());
+            return Ok(await _bookLibraryService.FindBookLibrariesAsync());
         }
 
         [HttpGet("{id}")]

@@ -21,11 +21,15 @@ public partial class Book
 
     public string? CoverUrl { get; set; }
 
+    public double Rating { get; set; }
+
     public virtual Author Author { get; set; } = null!;
 
     public virtual ICollection<BookCategory> BookCategories { get; } = new List<BookCategory>();
 
     public virtual ICollection<BookLibrary> BookLibraries { get; } = new List<BookLibrary>();
+
+    public virtual ICollection<BookUser> BookUsers { get; } = new List<BookUser>();
 
     public virtual Publisher Publisher { get; set; } = null!;
 

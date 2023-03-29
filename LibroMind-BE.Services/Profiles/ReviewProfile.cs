@@ -10,7 +10,6 @@ namespace LibroMind_BE.Services.Profiles
         {
             CreateMap<Review, ReviewGetDTO>().ReverseMap();
             CreateMap<Review, ReviewPostDTO>().ReverseMap();
-            CreateMap<Review, ReviewPutDTO>().ReverseMap();
         }
     }
 }

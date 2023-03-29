@@ -13,6 +13,7 @@ namespace LibroMind_BE.DAL.UnitOfWork
         private IBookRepository? _bookRepository;
         private IBookCategoryRepository? _bookCategoryRepository;
         private IBookLibraryRepository? _bookLibraryRepository;
+        private IBookUserRepository? _bookUserRepository;
         private IBorrowRepository? _borrowRepository;
         private ICategoryRepository? _categoryRepository;
         private ILibraryRepository? _libraryRepository;
@@ -36,6 +37,8 @@ namespace LibroMind_BE.DAL.UnitOfWork
             => _bookCategoryRepository ??= new BookCategoryRepository(_context);
         public IBookLibraryRepository BookLibraryRepository
             => _bookLibraryRepository ??= new BookLibraryRepository(_context);
+        public IBookUserRepository BookUserRepository
+            => _bookUserRepository ??= new BookUserRepository(_context);
         public IBorrowRepository BorrowRepository
             => _borrowRepository ??= new BorrowRepository(_context);
         public ICategoryRepository CategoryRepository

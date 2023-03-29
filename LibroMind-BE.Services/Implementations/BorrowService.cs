@@ -43,6 +43,16 @@ namespace LibroMind_BE.Services.Implementations
 
         public async Task AddBorrow(BorrowPostDTO borrowToAdd)
         {
+            if (await _unitOfWork.BookRepository.FindByIdAsync(borrowToAdd.BookLibraryId) is null)
+            {
+                throw new BadHttpRequestException("BookLibrary not found", StatusCodes.Status404NotFound);
+            }
+
+            if (await _unitOfWork.UserRepository.FindByIdAsync(borrowToAdd.UserId) is null)
+            {
+                throw new BadHttpRequestException("User not found", StatusCodes.Status404NotFound);
+            }
+
             var newBorrow = _mapper.Map<Borrow>(borrowToAdd);
 
             newBorrow.BorrowingDate = _dateTimeProvider.UtcNow;

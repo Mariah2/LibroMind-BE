@@ -18,7 +18,7 @@ namespace LibroMind_BE.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<LibraryGetDTO>> FindLibraryesAsync()
+        public async Task<IEnumerable<LibraryGetDTO>> FindLibrariesAsync()
         {
             return _mapper.Map<IEnumerable<LibraryGetDTO>>(await _unitOfWork.LibraryRepository.FindAllAsync());
         }
@@ -35,8 +35,32 @@ namespace LibroMind_BE.Services.Implementations
             return _mapper.Map<LibraryGetDTO>(existingLibrary);
         }
 
+        public async Task<IEnumerable<LibraryDetailsGetDTO>> FindLibraryDetailsAsync()
+        {
+            return _mapper.Map<IEnumerable<LibraryDetailsGetDTO>>(
+                await _unitOfWork.LibraryRepository.FindLibraryDetailsAsync());
+        }
+
+        public async Task<IEnumerable<BookDetailsGetDTO>> FindLibraryBooksByIdAsync(int id)
+        {
+            var existingLibrary = await _unitOfWork.LibraryRepository.FindByIdAsync(id);
+
+            if (existingLibrary is null)
+            {
+                throw new BadHttpRequestException("Library not found", StatusCodes.Status404NotFound);
+            }
+
+            return _mapper.Map<IEnumerable<BookDetailsGetDTO>>(
+                await _unitOfWork.BookRepository.FindLibraryBooksByIdAsync(id));
+        }
+
         public async Task AddLibrary(LibraryPostDTO libraryToAdd)
         {
+            if (await _unitOfWork.AddressRepository.FindByIdAsync(libraryToAdd.AddressId) is null)
+            {
+                throw new BadHttpRequestException("Address not found", StatusCodes.Status404NotFound);
+            }
+
             var newLibrary = _mapper.Map<Library>(libraryToAdd);
 
             _unitOfWork.LibraryRepository.Add(newLibrary);

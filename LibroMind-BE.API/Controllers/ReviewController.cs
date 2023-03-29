@@ -10,16 +10,13 @@ namespace LibroMind_BE.API.Controllers
     public class ReviewController : ControllerBase
     {
         private readonly IValidator<ReviewPostDTO> _validatorPost;
-        private readonly IValidator<ReviewPutDTO> _validatorPut;
         private readonly IReviewService _reviewService;
 
         public ReviewController(
             IValidator<ReviewPostDTO> validatorPost,
-            IValidator<ReviewPutDTO> validatorPut,
             IReviewService reviewService)
         {
             _validatorPost = validatorPost;
-            _validatorPut = validatorPut;
             _reviewService = reviewService;
         }
 
@@ -53,9 +50,9 @@ namespace LibroMind_BE.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReview(int id, ReviewPutDTO reviewToUpdate)
+        public async Task<IActionResult> PutReview(int id, ReviewPostDTO reviewToUpdate)
         {
-            var validationResult = await _validatorPut.ValidateAsync(reviewToUpdate);
+            var validationResult = await _validatorPost.ValidateAsync(reviewToUpdate);
 
             if (!validationResult.IsValid)
             {

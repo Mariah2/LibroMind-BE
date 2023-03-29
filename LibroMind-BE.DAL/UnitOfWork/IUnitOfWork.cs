@@ -9,6 +9,7 @@ namespace LibroMind_BE.DAL.UnitOfWork
         IBookRepository BookRepository { get; }
         IBookCategoryRepository BookCategoryRepository { get; }
         IBookLibraryRepository BookLibraryRepository { get; }
+        IBookUserRepository BookUserRepository { get; }
         IBorrowRepository BorrowRepository { get; }
         ICategoryRepository CategoryRepository { get; }
         ILibraryRepository LibraryRepository { get; }

@@ -17,5 +17,8 @@
         public string County { get; set; } = null!;
 
         public string Country { get; set; } = null!;
+
+        public string? Map { get; set; }
+
     }
 }

@@ -20,9 +20,21 @@ namespace LibroMind_BE.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBookes()
+        public async Task<IActionResult> GetBooks()
         {
-            return Ok(await _bookService.FindBookesAsync());
+            return Ok(await _bookService.FindBooksAsync());
+        }
+
+        [HttpGet("details")]
+        public async Task<IActionResult> GetBooksDetails()
+        {
+            return Ok(await _bookService.FindBooksDetailsAsync());
+        }
+
+        [HttpGet("details/{id}")]
+        public async Task<IActionResult> GetBookDetails(int id)
+        {
+            return Ok(await _bookService.FindBookDetailsByIdAsync(id));
         }
 
         [HttpGet("{id}")]

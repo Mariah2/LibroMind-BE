@@ -4,6 +4,7 @@ using LibroMind_BE.DAL.UnitOfWork;
 using LibroMind_BE.Services.Interfaces;
 using LibroMind_BE.Services.Models;
 using Microsoft.AspNetCore.Http;
+using System.Transactions;
 
 namespace LibroMind_BE.Services.Implementations
 {
@@ -37,14 +38,48 @@ namespace LibroMind_BE.Services.Implementations
 
         public async Task AddReview(ReviewPostDTO reviewToAdd)
         {
+            if (await _unitOfWork.BookRepository.FindByIdAsync(reviewToAdd.BookId) is not Book book)
+            {
+                throw new BadHttpRequestException(
+                    "Book not found",
+                    StatusCodes.Status404NotFound);
+            }
+
+            if (await _unitOfWork.UserRepository.FindByIdAsync(reviewToAdd.UserId) is null)
+            {
+                throw new BadHttpRequestException(
+                    "User not found",
+                    StatusCodes.Status404NotFound);
+            }
+            if (await _unitOfWork.ReviewRepository.CountAsync(r =>
+                r.UserId == reviewToAdd.UserId && r.BookId == reviewToAdd.BookId) > 0)
+            {
+                throw new BadHttpRequestException(
+                    "User has already reviewed this book!",
+                    StatusCodes.Status400BadRequest);
+            }
+
             var newReview = _mapper.Map<Review>(reviewToAdd);
 
-            _unitOfWork.ReviewRepository.Add(newReview);
+            using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                _unitOfWork.ReviewRepository.Add(newReview);
+
+                await _unitOfWork.CommitAsync();
+
+                await CalculateRating(book);
+
+                transaction.Complete();
+            }
+            catch
+            {
+                await _unitOfWork.RollBackAsync();
+            }
         }
 
-        public async Task UpdateReview(int id, ReviewPutDTO reviewToUpdate)
+        public async Task UpdateReview(int id, ReviewPostDTO reviewToUpdate)
         {
             var existingReview = await _unitOfWork.ReviewRepository.FindByIdAsync(id);
 
@@ -53,11 +88,34 @@ namespace LibroMind_BE.Services.Implementations
                 throw new BadHttpRequestException("Review not found", StatusCodes.Status404NotFound);
             }
 
+            if (await _unitOfWork.BookRepository.FindByIdAsync(reviewToUpdate.BookId) is not Book book)
+            {
+                throw new BadHttpRequestException("Book not found", StatusCodes.Status404NotFound);
+            }
+
+            if (await _unitOfWork.UserRepository.FindByIdAsync(reviewToUpdate.UserId) is null)
+            {
+                throw new BadHttpRequestException("User not found", StatusCodes.Status404NotFound);
+            }
+
             _mapper.Map(reviewToUpdate, existingReview);
 
-            _unitOfWork.ReviewRepository.Update(existingReview);
+            using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                _unitOfWork.ReviewRepository.Update(existingReview);
+
+                await _unitOfWork.CommitAsync();
+
+                await CalculateRating(book);
+
+                transaction.Complete();
+            }
+            catch
+            {
+                await _unitOfWork.RollBackAsync();
+            }
         }
 
         public async Task DeleteReview(int id)
@@ -69,7 +127,50 @@ namespace LibroMind_BE.Services.Implementations
                 throw new BadHttpRequestException("Review not found", StatusCodes.Status404NotFound);
             }
 
-            _unitOfWork.ReviewRepository.Remove(existingReview);
+            if (await _unitOfWork.BookRepository.FindByIdAsync(existingReview.BookId) is not Book book)
+            {
+                throw new BadHttpRequestException("Book not found", StatusCodes.Status404NotFound);
+            }
+
+            using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+            try
+            {
+                _unitOfWork.ReviewRepository.Remove(existingReview);
+
+                await _unitOfWork.CommitAsync();
+
+                await CalculateRating(book);
+
+                transaction.Complete();
+            }
+            catch
+            {
+                await _unitOfWork.RollBackAsync();
+            }
+        }
+
+        private async Task CalculateRating(Book book)
+        {
+            var reviews = await _unitOfWork.ReviewRepository.FindAsync(r => r.BookId == book.Id);
+
+            double rating = 0;
+
+            foreach (var review in reviews)
+            {
+                rating += review.Rating;
+            }
+
+            var reviewsCount = reviews.Count();
+
+            if (reviewsCount > 0)
+            {
+                rating /= reviewsCount;
+            }
+
+            book.Rating = rating;
+
+            _unitOfWork.BookRepository.Update(book);
 
             await _unitOfWork.CommitAsync();
         }

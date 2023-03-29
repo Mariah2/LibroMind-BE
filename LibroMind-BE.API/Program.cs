@@ -10,6 +10,7 @@ using LibroMind_BE.DAL.UnitOfWork;
 using LibroMind_BE.Services.Implementations;
 using LibroMind_BE.Services.Interfaces;
 using LibroMind_BE.Services.Models;
+using LibroMind_BE.Services.Models.Put;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
@@ -35,13 +36,20 @@ builder.Services.AddControllers();
 builder.Services
     .AddScoped<IValidator<AddressPostDTO>, AddAddressValidator>()
     .AddScoped<IValidator<AuthorPostDTO>, AddAuthorValidator>()
-    .AddScoped<IValidator<BorrowPutDTO>, UpdateBorrowValidator>()
+    .AddScoped<IValidator<BookCategoryPostDTO>, AddBookCategoryValidator>()
+    .AddScoped<IValidator<BookLibraryPostDTO>, AddBookLibraryValidator>()
     .AddScoped<IValidator<BookLibraryPutDTO>, UpdateBookLibraryValidator>()
     .AddScoped<IValidator<BookPostDTO>, AddBookValidator>()
-    .AddScoped<IValidator<BookCategoryPostDTO>, AddBookCategoryValidator>()
+    .AddScoped<IValidator<BookUserPostDTO>, AddBookUserValidator>()
+    .AddScoped<IValidator<BorrowPostDTO>, AddBorrowValidator>()
+    .AddScoped<IValidator<BorrowPutDTO>, UpdateBorrowValidator>()
     .AddScoped<IValidator<CategoryPostDTO>, AddCategoryValidator>()
+    .AddScoped<IValidator<LibraryPostDTO>, AddLibraryValidator>()
+    .AddScoped<IValidator<PublisherPostDTO>, AddPublisherValidator>()
     .AddScoped<IValidator<ReviewPostDTO>, AddReviewValidator>()
-    .AddScoped<IValidator<ReviewPutDTO>, UpdateReviewValidator>();
+    .AddScoped<IValidator<UserPostDTO>, AddUserValidator>()
+    .AddScoped<IValidator<UserPutDTO>, UpdateUserValidator>();
+
 
 
 builder.Services.AddSingleton<ProblemDetailsFactory, LibroMindProblemDetailsFactory>();
@@ -53,6 +61,10 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.Configure<RouteOptions>(options =>
+{
+    options.LowercaseUrls = true;
+});
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<LibroMindContext>(options =>
@@ -70,6 +82,7 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IBookCategoryRepository, BookCategoryRepository>();
 builder.Services.AddScoped<IBookLibraryRepository, BookLibraryRepository>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IBookUserRepository, BookUserRepository>();
 builder.Services.AddScoped<IBorrowRepository, BorrowRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
@@ -86,6 +99,7 @@ builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IBookCategoryService, BookCategoryService>();
 builder.Services.AddScoped<IBookLibraryService, BookLibraryService>();
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IBookUserService, BookUserService>();
 builder.Services.AddScoped<IBorrowService, BorrowService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ILibraryService, LibraryService>();
@@ -149,6 +163,7 @@ var app = builder.Build();
         app.UseExceptionHandler("/error-development");
     }
 
+    app.UseCors("default");
     app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();

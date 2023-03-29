@@ -23,6 +23,8 @@ public partial class Address
 
     public string Country { get; set; } = null!;
 
+    public string? Map { get; set; }
+
     public virtual ICollection<Library> Libraries { get; } = new List<Library>();
 
     public virtual ICollection<User> Users { get; } = new List<User>();

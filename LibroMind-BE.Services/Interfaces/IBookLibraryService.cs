@@ -4,7 +4,7 @@ namespace LibroMind_BE.Services.Interfaces
 {
     public interface IBookLibraryService
     {
-        public Task<IEnumerable<BookLibraryGetDTO>> FindBookLibraryesAsync();
+        public Task<IEnumerable<BookLibraryGetDTO>> FindBookLibrariesAsync();
         public Task<BookLibraryGetDTO> FindBookLibraryByIdAsync(int id);
         public Task AddBookLibrary(BookLibraryPostDTO bookLibraryToAdd);
         public Task UpdateBookLibrary(int id, BookLibraryPutDTO bookLibraryToUpdate);

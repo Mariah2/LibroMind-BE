@@ -9,6 +9,8 @@ public partial class User
 
     public int? AddressId { get; set; }
 
+    public int? LibraryId { get; set; }
+
     public int RoleId { get; set; }
 
     public string FirstName { get; set; } = null!;
@@ -27,7 +29,11 @@ public partial class User
 
     public virtual Address? Address { get; set; }
 
+    public virtual ICollection<BookUser> BookUsers { get; } = new List<BookUser>();
+
     public virtual ICollection<Borrow> Borrows { get; } = new List<Borrow>();
+
+    public virtual Library? Library { get; set; }
 
     public virtual ICollection<Review> Reviews { get; } = new List<Review>();
 

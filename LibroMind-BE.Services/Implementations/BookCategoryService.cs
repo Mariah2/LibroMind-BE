@@ -37,6 +37,16 @@ namespace LibroMind_BE.Services.Implementations
 
         public async Task AddBookCategory(BookCategoryPostDTO bookCategoryToAdd)
         {
+            if (await _unitOfWork.BookRepository.FindByIdAsync(bookCategoryToAdd.BookId) is null)
+            {
+                throw new BadHttpRequestException("Book not found", StatusCodes.Status404NotFound);
+            }
+
+            if (await _unitOfWork.CategoryRepository.FindByIdAsync(bookCategoryToAdd.CategoryId) is null)
+            {
+                throw new BadHttpRequestException("Category not found", StatusCodes.Status404NotFound);
+            }
+
             var newBookCategory = _mapper.Map<BookCategory>(bookCategoryToAdd);
 
             _unitOfWork.BookCategoryRepository.Add(newBookCategory);

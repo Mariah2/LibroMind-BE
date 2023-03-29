@@ -18,9 +18,14 @@ namespace LibroMind_BE.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<BookGetDTO>> FindBookesAsync()
+        public async Task<IEnumerable<BookGetDTO>> FindBooksAsync()
         {
             return _mapper.Map<IEnumerable<BookGetDTO>>(await _unitOfWork.BookRepository.FindAllAsync());
+        }
+
+        public async Task<IEnumerable<BookDetailsGetDTO>> FindBooksDetailsAsync()
+        {
+            return _mapper.Map<IEnumerable<BookDetailsGetDTO>>(await _unitOfWork.BookRepository.FindBooksDetailsAsync());
         }
 
         public async Task<BookGetDTO> FindBookByIdAsync(int id)
@@ -35,9 +40,33 @@ namespace LibroMind_BE.Services.Implementations
             return _mapper.Map<BookGetDTO>(existingBook);
         }
 
+        public async Task<BookDetailsGetDTO> FindBookDetailsByIdAsync(int id)
+        {
+            var existingBook = await _unitOfWork.BookRepository.FindBookDetailsByIdAsync(id);
+
+            if (existingBook is null)
+            {
+                throw new BadHttpRequestException("Book not found", StatusCodes.Status404NotFound);
+            }
+
+            return _mapper.Map<BookDetailsGetDTO>(existingBook);
+        }
+
         public async Task AddBook(BookPostDTO bookToAdd)
         {
+            if (await _unitOfWork.AuthorRepository.FindByIdAsync(bookToAdd.AuthorId) is null)
+            {
+                throw new BadHttpRequestException("Author not found", StatusCodes.Status404NotFound);
+            }
+
+            if (await _unitOfWork.PublisherRepository.FindByIdAsync(bookToAdd.PublisherId) is null)
+            {
+                throw new BadHttpRequestException("Publisher not found", StatusCodes.Status404NotFound);
+            }
+
             var newBook = _mapper.Map<Book>(bookToAdd);
+
+            newBook.Rating = 0;
 
             _unitOfWork.BookRepository.Add(newBook);
 

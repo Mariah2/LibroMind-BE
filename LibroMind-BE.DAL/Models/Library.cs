@@ -14,4 +14,6 @@ public partial class Library
     public virtual Address Address { get; set; } = null!;
 
     public virtual ICollection<BookLibrary> BookLibraries { get; } = new List<BookLibrary>();
+
+    public virtual ICollection<User> Users { get; } = new List<User>();
 }

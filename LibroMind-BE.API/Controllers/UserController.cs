@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using LibroMind_BE.API.Validations;
 using LibroMind_BE.Services.Interfaces;
-using LibroMind_BE.Services.Models;
+using LibroMind_BE.Services.Models.Put;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibroMind_BE.API.Controllers
@@ -10,12 +9,12 @@ namespace LibroMind_BE.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IValidator<UserPostDTO> _validator;
+        private readonly IValidator<UserPutDTO> _validatorPut;
         private readonly IUserService _userService;
 
-        public UserController(IValidator<UserPostDTO> validator, IUserService userService)
+        public UserController(IValidator<UserPutDTO> validatorPut, IUserService userService)
         {
-            _validator = validator;
+            _validatorPut = validatorPut;
             _userService = userService;
         }
 
@@ -31,27 +30,10 @@ namespace LibroMind_BE.API.Controllers
             return Ok(await _userService.FindUserByIdAsync(id));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> PostUser(UserPostDTO userToAdd)
-        {
-            var validationResult = await _validator.ValidateAsync(userToAdd);
-
-            if (!validationResult.IsValid)
-            {
-                throw new BadHttpRequestException(
-                    "One or more validation errors occured",
-                    new ValidationException(validationResult.Errors));
-            }
-
-            await _userService.AddUser(userToAdd);
-
-            return Ok("User was added successfully!");
-        }
-
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, UserPostDTO userToUpdate)
+        public async Task<IActionResult> PutUser(int id, UserPutDTO userToUpdate)
         {
-            var validationResult = await _validator.ValidateAsync(userToUpdate);
+            var validationResult = await _validatorPut.ValidateAsync(userToUpdate);
 
             if (!validationResult.IsValid)
             {

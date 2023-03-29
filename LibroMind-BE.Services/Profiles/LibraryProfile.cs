@@ -10,6 +10,8 @@ namespace LibroMind_BE.Services.Profiles
         {
             CreateMap<Library, LibraryGetDTO>().ReverseMap();
             CreateMap<Library, LibraryPostDTO>().ReverseMap();
+            CreateMap<Library, LibraryDetailsGetDTO>()
+                .ForMember(dst => dst.Address, src => src.MapFrom(l => l.Address));
         }
     }
 }

@@ -3,6 +3,7 @@ using LibroMind_BE.DAL.Models;
 using LibroMind_BE.DAL.UnitOfWork;
 using LibroMind_BE.Services.Interfaces;
 using LibroMind_BE.Services.Models;
+using LibroMind_BE.Services.Models.Put;
 using Microsoft.AspNetCore.Http;
 
 namespace LibroMind_BE.Services.Implementations
@@ -35,16 +36,7 @@ namespace LibroMind_BE.Services.Implementations
             return _mapper.Map<UserGetDTO>(existingUser);
         }
 
-        public async Task AddUser(UserPostDTO userToAdd)
-        {
-            var newUser = _mapper.Map<User>(userToAdd);
-
-            _unitOfWork.UserRepository.Add(newUser);
-
-            await _unitOfWork.CommitAsync();
-        }
-
-        public async Task UpdateUser(int id, UserPostDTO userToUpdate)
+        public async Task UpdateUser(int id, UserPutDTO userToUpdate)
         {
             var existingUser = await _unitOfWork.UserRepository.FindByIdAsync(id);
 
