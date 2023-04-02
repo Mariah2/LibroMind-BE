@@ -11,5 +11,7 @@
         public AuthorGetDTO Author { get; set; } = null!;
 
         public BookGetDTO Book { get; set; } = null!;
+
+        public LibraryGetDTO Library { get; set; } = null!;
     }
 }

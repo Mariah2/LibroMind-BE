@@ -24,7 +24,9 @@ namespace LibroMind_BE.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterPostDTO registerPost)
         {
-            return Ok(await _authenticationService.RegisterAsync(registerPost));
+            await _authenticationService.RegisterAsync(registerPost);
+
+            return StatusCode(StatusCodes.Status201Created, "Your account has successfully been created!");
         }
     }
 }

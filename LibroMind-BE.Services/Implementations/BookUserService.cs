@@ -47,6 +47,12 @@ namespace LibroMind_BE.Services.Implementations
                 throw new BadHttpRequestException("User not found", StatusCodes.Status404NotFound);
             }
 
+            if (await _unitOfWork.BookUserRepository.CheckIfBookAlreadyInToRead(
+                bookUserToAdd.UserId, bookUserToAdd.BookId))
+            {
+                throw new BadHttpRequestException("Book already marked as 'To read'!", StatusCodes.Status400BadRequest);
+            }
+
             var newBookUser = _mapper.Map<BookUser>(bookUserToAdd);
 
             _unitOfWork.BookUserRepository.Add(newBookUser);

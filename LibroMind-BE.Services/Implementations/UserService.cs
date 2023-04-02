@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using LibroMind_BE.DAL.Models;
 using LibroMind_BE.DAL.UnitOfWork;
 using LibroMind_BE.Services.Interfaces;
 using LibroMind_BE.Services.Models;
+using LibroMind_BE.Services.Models.Get;
 using LibroMind_BE.Services.Models.Put;
 using Microsoft.AspNetCore.Http;
 
@@ -19,7 +19,7 @@ namespace LibroMind_BE.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<UserGetDTO>> FindUseresAsync()
+        public async Task<IEnumerable<UserGetDTO>> FindUsersAsync()
         {
             return _mapper.Map<IEnumerable<UserGetDTO>>(await _unitOfWork.UserRepository.FindAllAsync());
         }
@@ -34,6 +34,31 @@ namespace LibroMind_BE.Services.Implementations
             }
 
             return _mapper.Map<UserGetDTO>(existingUser);
+        }
+
+        public async Task<UserProfileGetDTO> FindUserProfileByIdAsync(int id)
+        {
+            var existingUser = await _unitOfWork.UserRepository.FindUserProfileByIdAsync(id);
+
+            if (existingUser is null)
+            {
+                throw new BadHttpRequestException("User not found", StatusCodes.Status404NotFound);
+            }
+
+            return _mapper.Map<UserProfileGetDTO>(existingUser);
+        }
+
+        public async Task<IEnumerable<BookDetailsGetDTO>> FindUserBooksByIdAsync(int id)
+        {
+            var existingUser = await _unitOfWork.UserRepository.FindByIdAsync(id);
+
+            if (existingUser is null)
+            {
+                throw new BadHttpRequestException("User not found", StatusCodes.Status404NotFound);
+            }
+
+            return _mapper.Map<IEnumerable<BookDetailsGetDTO>>(
+                await _unitOfWork.BookRepository.FindUserBooksByIdAsync(id));
         }
 
         public async Task UpdateUser(int id, UserPutDTO userToUpdate)

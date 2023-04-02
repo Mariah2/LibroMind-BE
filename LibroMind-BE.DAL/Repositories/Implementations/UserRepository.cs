@@ -12,5 +12,12 @@ namespace LibroMind_BE.DAL.Repositories.Implementations
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
+
+        public async Task<User?> FindUserProfileByIdAsync(int id)
+        {
+            return await _context.Users
+                                .Include(u => u.Library)
+                                .FirstOrDefaultAsync(u => u.Id == id);
+        }
     }
 }

@@ -7,5 +7,7 @@ namespace LibroMind_BE.DAL.Repositories.Interfaces
         Task<IEnumerable<Book>> FindBooksDetailsAsync();
         Task<Book?> FindBookDetailsByIdAsync(int id);
         Task<IEnumerable<Book>> FindLibraryBooksByIdAsync(int id);
+        Task<IEnumerable<Book>> FindUserBooksByIdAsync(int id);
+
     }
 }

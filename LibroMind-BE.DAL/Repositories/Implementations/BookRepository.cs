@@ -37,5 +37,16 @@ namespace LibroMind_BE.DAL.Repositories.Implementations
                                 .Select(bl => bl.Book)
                                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Book>> FindUserBooksByIdAsync(int id)
+        {
+            return await _context.BookUsers
+                                .Include(bu => bu.Book)
+                                    .ThenInclude(b => b.Author)
+                                .Where(bu => bu.UserId == id)
+                                .Select(bu => bu.Book)
+                                .ToListAsync();
+
+        }
     }
 }

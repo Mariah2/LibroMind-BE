@@ -2,5 +2,8 @@
 
 namespace LibroMind_BE.DAL.Repositories.Interfaces
 {
-    public interface IBookUserRepository : IBaseRepository<BookUser> { }
+    public interface IBookUserRepository : IBaseRepository<BookUser>
+    {
+        public Task<bool> CheckIfBookAlreadyInToRead(int userId, int bookId);
+    }
 }

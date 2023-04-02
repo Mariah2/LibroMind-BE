@@ -8,6 +8,7 @@ using LibroMind_BE.Common.DateTimeProvider;
 using System.Security.Cryptography;
 using LibroMind_BE.DAL.Models;
 using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 
 namespace LibroMind_BE.Services.Implementations
 {
@@ -31,10 +32,12 @@ namespace LibroMind_BE.Services.Implementations
                 throw new BadHttpRequestException("Invalid credentials", StatusCodes.Status401Unauthorized);
             }
 
-            return GenerateToken(loginPost.Email);
+            string token = GenerateToken(existingUser);
+
+            return JsonSerializer.Serialize(new { token });
         }
 
-        public async Task<string> RegisterAsync(RegisterPostDTO registerPost)
+        public async Task RegisterAsync(RegisterPostDTO registerPost)
         {
             CreateHash(registerPost.Password, out byte[] hash, out byte[] salt);
 
@@ -60,20 +63,17 @@ namespace LibroMind_BE.Services.Implementations
                 Salt = salt
             };
 
-
             _unitOfWork.UserRepository.Add(newUser);
 
             await _unitOfWork.CommitAsync();
-
-            return GenerateToken(registerPost.Email);
-
         }
 
-        private string GenerateToken(string email)
+        private string GenerateToken(User user)
         {
             Claim[] claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Email, email)
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email)
             };
 
             SymmetricSecurityKey key = new(System.Text.Encoding.UTF8.GetBytes("my-top-secret-key"));

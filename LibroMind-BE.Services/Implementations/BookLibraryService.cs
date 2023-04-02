@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LibroMind_BE.Common.DateTimeProvider;
 using LibroMind_BE.DAL.Models;
 using LibroMind_BE.DAL.UnitOfWork;
 using LibroMind_BE.Services.Interfaces;
@@ -9,11 +10,13 @@ namespace LibroMind_BE.Services.Implementations
 {
     public class BookLibraryService : IBookLibraryService
     {
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BookLibraryService(IUnitOfWork unitOfWork, IMapper mapper)
+        public BookLibraryService(IDateTimeProvider dateTimeProvider, IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _dateTimeProvider = dateTimeProvider;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -48,6 +51,8 @@ namespace LibroMind_BE.Services.Implementations
             }
 
             var newBookLibrary = _mapper.Map<BookLibrary>(bookLibraryToAdd);
+
+            newBookLibrary.AddedDate = _dateTimeProvider.UtcNow;
 
             _unitOfWork.BookLibraryRepository.Add(newBookLibrary);
 
