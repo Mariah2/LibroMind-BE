@@ -45,7 +45,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _bookUserService.AddBookUser(bookUserToAdd);
 
-            return Ok("BookUser was added successfully!");
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -62,7 +62,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _bookUserService.UpdateBookUser(id, bookUserToUpdate);
 
-            return Ok("BookUser was updated successfully!");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -70,7 +70,7 @@ namespace LibroMind_BE.API.Controllers
         {
             await _bookUserService.DeleteBookUser(id);
 
-            return Ok("BookUser was deleted successfully!");
+            return Ok();
         }
     }
 }

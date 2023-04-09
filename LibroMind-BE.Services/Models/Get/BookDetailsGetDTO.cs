@@ -20,6 +20,8 @@
 
         public PublisherGetDTO Publisher { get; set; } = null!;
 
+        public IEnumerable<ReviewGetDTO> Reviews { get; } = new List<ReviewGetDTO>();
+
         public IEnumerable<BookCategoryDetailsGetDTO> BookCategories { get; } = new List<BookCategoryDetailsGetDTO>();
 
         public IEnumerable<BookLibraryDetailsGetDTO> BookLibraries { get; } = new List<BookLibraryDetailsGetDTO>();

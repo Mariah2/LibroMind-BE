@@ -23,7 +23,7 @@ namespace LibroMind_BE.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetReviewes()
         {
-            return Ok(await _reviewService.FindReviewesAsync());
+            return Ok(await _reviewService.FindReviewesDetailsAsync());
         }
 
         [HttpGet("{id}")]

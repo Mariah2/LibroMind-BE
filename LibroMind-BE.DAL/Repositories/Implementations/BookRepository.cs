@@ -25,6 +25,8 @@ namespace LibroMind_BE.DAL.Repositories.Implementations
                                     .ThenInclude(bl => bl.Library)
                                 .Include(b => b.BookCategories)
                                     .ThenInclude(bc => bc.Category)
+                                .Include(b => b.Reviews)
+                                    .ThenInclude(r => r.User)
                                 .FirstOrDefaultAsync(b => b.Id == id);
         }
 

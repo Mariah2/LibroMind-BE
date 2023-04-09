@@ -57,7 +57,7 @@ namespace LibroMind_BE.Services.Implementations
 
             newBorrow.BorrowingDate = _dateTimeProvider.UtcNow;
             newBorrow.ReturnDate = newBorrow.BorrowingDate.AddDays(14);
-            newBorrow.HasReturnedBook = false;
+            newBorrow.HasReturnedBook = true;
 
             _unitOfWork.BorrowRepository.Add(newBorrow);
 

@@ -179,6 +179,8 @@ public partial class LibroMindContext : DbContext
         {
             entity.ToTable("Review");
 
+            entity.Property(e => e.AddedDate).HasColumnType("date");
+
             entity.HasOne(d => d.Book).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.BookId)
                 .OnDelete(DeleteBehavior.ClientSetNull)

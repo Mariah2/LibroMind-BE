@@ -10,6 +10,7 @@ namespace LibroMind_BE.Services.Profiles
         {
             CreateMap<BookCategory, BookCategoryGetDTO>().ReverseMap();
             CreateMap<BookCategory, BookCategoryPostDTO>().ReverseMap();
+            CreateMap<BookCategory, BookCategoryDetailsGetDTO>().ReverseMap();
         }
     }
 }

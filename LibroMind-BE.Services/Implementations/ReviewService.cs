@@ -36,6 +36,11 @@ namespace LibroMind_BE.Services.Implementations
             return _mapper.Map<ReviewGetDTO>(existingReview);
         }
 
+        public async Task<IEnumerable<ReviewGetDTO>> FindReviewesDetailsAsync()
+        {
+            return _mapper.Map<IEnumerable<ReviewGetDTO>>(await _unitOfWork.ReviewRepository.FindReviewsDetailsAsync());
+        }
+
         public async Task AddReview(ReviewPostDTO reviewToAdd)
         {
             if (await _unitOfWork.BookRepository.FindByIdAsync(reviewToAdd.BookId) is not Book book)
@@ -60,6 +65,8 @@ namespace LibroMind_BE.Services.Implementations
             }
 
             var newReview = _mapper.Map<Review>(reviewToAdd);
+
+            reviewToAdd.AddedDate = DateTime.Now;
 
             using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

@@ -13,6 +13,7 @@ namespace LibroMind_BE.Services.Profiles
             CreateMap<Book, BookDetailsGetDTO>()
                 .ForMember(dst => dst.Author, src => src.MapFrom(b => b.Author))
                 .ForMember(dst => dst.Publisher, src => src.MapFrom(b => b.Publisher))
+                .ForMember(dst => dst.Reviews, src => src.MapFrom(b => b.Reviews))
                 .ForMember(dst => dst.BookCategories, src => src.MapFrom(b => b.BookCategories))
                 .ForMember(dst => dst.BookLibraries, src => src.MapFrom(b => b.BookLibraries));
         }
