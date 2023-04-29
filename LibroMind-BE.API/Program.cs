@@ -50,8 +50,6 @@ builder.Services
     .AddScoped<IValidator<UserPostDTO>, AddUserValidator>()
     .AddScoped<IValidator<UserPutDTO>, UpdateUserValidator>();
 
-
-
 builder.Services.AddSingleton<ProblemDetailsFactory, LibroMindProblemDetailsFactory>();
 
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

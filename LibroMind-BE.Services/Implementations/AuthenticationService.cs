@@ -73,7 +73,8 @@ namespace LibroMind_BE.Services.Implementations
             Claim[] claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("role", user.Role.Name)
             };
 
             SymmetricSecurityKey key = new(System.Text.Encoding.UTF8.GetBytes("my-top-secret-key"));
