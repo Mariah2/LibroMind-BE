@@ -2,5 +2,8 @@
 
 namespace LibroMind_BE.DAL.Repositories.Interfaces
 {
-    public interface IBookLibraryRepository : IBaseRepository<BookLibrary> { }
+    public interface IBookLibraryRepository : IBaseRepository<BookLibrary>
+    {
+        Task<BookLibrary?> FindBookLibraryByBookIdAndLibraryIdAsync(int bookId, int libraryId);
+    }
 }

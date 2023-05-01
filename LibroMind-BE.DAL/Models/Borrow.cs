@@ -15,7 +15,9 @@ public partial class Borrow
 
     public DateTime ReturnDate { get; set; }
 
-    public bool HasReturnedBook { get; set; }
+    public bool? HasReturnedBook { get; set; }
+
+    public bool WasExtensionRequested { get; set; }
 
     public virtual BookLibrary BookLibrary { get; set; } = null!;
 

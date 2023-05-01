@@ -50,7 +50,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _userService.UpdateUser(id, userToUpdate);
 
-            return Ok("User was updated successfully!");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -58,7 +58,7 @@ namespace LibroMind_BE.API.Controllers
         {
             await _userService.DeleteUser(id);
 
-            return Ok("User was deleted successfully!");
+            return Ok();
         }
     }
 }

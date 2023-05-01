@@ -25,19 +25,31 @@ namespace LibroMind_BE.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBorrowes()
+        public async Task<IActionResult> GetBorrowings()
         {
-            return Ok(await _borrowService.FindBorrowesAsync());
+            return Ok(await _borrowService.FindBorrowingsAsync());
+        }
+
+        [HttpGet("libraries/{libraryId}")]
+        public async Task<IActionResult> GetBorrowingsByLibraryId(int libraryId)
+        {
+            return Ok(await _borrowService.FindBorrowingsByLibraryIdAsync(libraryId));
+        }
+
+        [HttpGet("users/{userId}")]
+        public async Task<IActionResult> GetBorrowingsByUserId(int userId)
+        {
+            return Ok(await _borrowService.FindBorrowingsByUserIdAsync(userId));
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBorrow(int id)
+        public async Task<IActionResult> GetBorrowing(int id)
         {
-            return Ok(await _borrowService.FindBorrowByIdAsync(id));
+            return Ok(await _borrowService.FindBorrowingByIdAsync(id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostBorrow(BorrowPostDTO borrowToAdd)
+        public async Task<IActionResult> PostBorrowing(BorrowPostDTO borrowToAdd)
         {
             var validationResult = await _validatorPost.ValidateAsync(borrowToAdd);
 
@@ -48,13 +60,13 @@ namespace LibroMind_BE.API.Controllers
                     new ValidationException(validationResult.Errors));
             }
 
-            await _borrowService.AddBorrow(borrowToAdd);
+            await _borrowService.AddBorrowingAsync(borrowToAdd);
 
-            return Ok("Borrow was added successfully!");
+            return Ok();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBorrow(int id, BorrowPutDTO borrowToUpdate)
+        public async Task<IActionResult> PutBorrowing(int id, BorrowPutDTO borrowToUpdate)
         {
             var validationResult = await _validatorPut.ValidateAsync(borrowToUpdate);
 
@@ -65,25 +77,49 @@ namespace LibroMind_BE.API.Controllers
                     new ValidationException(validationResult.Errors));
             }
 
-            await _borrowService.UpdateBorrow(id, borrowToUpdate);
+            await _borrowService.UpdateBorrowingAsync(id, borrowToUpdate);
 
-            return Ok("Borrow was updated successfully!");
+            return Ok();
+        }
+
+        [HttpPut("{id}/accept")]
+        public async Task<IActionResult> AcceptBorrowing(int id)
+        {
+            await _borrowService.AcceptBorrowingAsync(id);
+
+            return Ok();
         }
 
         [HttpPut("{id}/extend")]
-        public async Task<IActionResult> ExtendBorrow(int id)
+        public async Task<IActionResult> ExtendBorrowing(int id)
         {
-            await _borrowService.ExtendBorrow(id);
+            await _borrowService.ExtendBorrowingAsync(id);
 
-            return Ok("Borrow was extended successfully!");
+            return Ok();
+        }
+
+        [HttpPut("{id}/return")]
+        public async Task<IActionResult> ReturnBorrowing(int id)
+        {
+            await _borrowService.ReturnBorrowingAsync(id);
+
+            return Ok();
+        }
+
+        [HttpPut("{id}/request-extension")]
+        public async Task<IActionResult> RequestExtensionForBorrowing(int id)
+        {
+            await _borrowService.RequestExtensionForBorrowingAsync(id);
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBorrow(int id)
+        public async Task<IActionResult> DeleteBorrowing(int id)
         {
-            await _borrowService.DeleteBorrow(id);
+            await _borrowService.DeleteBorrowingAsync(id);
 
-            return Ok("Borrow was deleted successfully!");
+            return Ok();
         }
     }
 }

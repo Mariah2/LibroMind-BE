@@ -1,6 +1,8 @@
-﻿namespace LibroMind_BE.Services.Models
+﻿using LibroMind_BE.DAL.Entities;
+
+namespace LibroMind_BE.Services.Models
 {
-    public class BorrowGetDTO
+    public class BorrowingDetailsGetDTO
     {
         public int Id { get; set; }
 
@@ -12,8 +14,12 @@
 
         public DateTime ReturnDate { get; set; }
 
-        public bool HasReturnedBook { get; set; }
-        
+        public bool? HasReturnedBook { get; set; }
+
         public bool WasExtensionRequested { get; set; }
+
+        public BookCard Book { get; set; } = null!;
+
+        public UserBasicInfo User { get; set; } = null!;
     }
 }

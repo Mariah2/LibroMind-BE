@@ -36,6 +36,12 @@ namespace LibroMind_BE.API.Controllers
             return Ok(await _bookLibraryService.FindBookLibraryByIdAsync(id));
         }
 
+        [HttpGet("book/{bookId}/library/{libraryId}")]
+        public async Task<IActionResult> GetBookLibraryByBookIdAndLibraryId(int bookId, int libraryId)
+        {
+            return Ok(await _bookLibraryService.FindBookLibraryByBookIdAndLibraryIdAsync(bookId, libraryId));
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostBookLibrary(BookLibraryPostDTO bookLibraryToAdd)
         {

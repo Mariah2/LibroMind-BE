@@ -4,6 +4,6 @@
     {
         public DateTime ReturnDate { get; set; }
 
-        public bool HasReturnedBook { get; set; }
+        public bool? HasReturnedBook { get; set; }
     }
 }

@@ -24,12 +24,22 @@ namespace LibroMind_BE.Services.Implementations
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public async Task<IEnumerable<BorrowGetDTO>> FindBorrowesAsync()
+        public async Task<IEnumerable<BorrowGetDTO>> FindBorrowingsAsync()
         {
             return _mapper.Map<IEnumerable<BorrowGetDTO>>(await _unitOfWork.BorrowRepository.FindAllAsync());
         }
 
-        public async Task<BorrowGetDTO> FindBorrowByIdAsync(int id)
+        public async Task<IEnumerable<BorrowingDetailsGetDTO>> FindBorrowingsByLibraryIdAsync(int libraryId)
+        {
+            return _mapper.Map<IEnumerable<BorrowingDetailsGetDTO>>(await _unitOfWork.BorrowRepository.FindBorrowingsByLibraryIdAsync(libraryId));
+        }
+
+        public async Task<IEnumerable<BorrowingDetailsGetDTO>> FindBorrowingsByUserIdAsync(int userId)
+        {
+            return _mapper.Map<IEnumerable<BorrowingDetailsGetDTO>>(await _unitOfWork.BorrowRepository.FindBorrowingsByUserIdAsync(userId));
+        }
+
+        public async Task<BorrowGetDTO> FindBorrowingByIdAsync(int id)
         {
             var existingBorrow = await _unitOfWork.BorrowRepository.FindByIdAsync(id);
 
@@ -41,9 +51,9 @@ namespace LibroMind_BE.Services.Implementations
             return _mapper.Map<BorrowGetDTO>(existingBorrow);
         }
 
-        public async Task AddBorrow(BorrowPostDTO borrowToAdd)
+        public async Task AddBorrowingAsync(BorrowPostDTO borrowToAdd)
         {
-            if (await _unitOfWork.BookRepository.FindByIdAsync(borrowToAdd.BookLibraryId) is null)
+            if (await _unitOfWork.BookLibraryRepository.FindByIdAsync(borrowToAdd.BookLibraryId) is not BookLibrary bookLibrary)
             {
                 throw new BadHttpRequestException("BookLibrary not found", StatusCodes.Status404NotFound);
             }
@@ -53,18 +63,30 @@ namespace LibroMind_BE.Services.Implementations
                 throw new BadHttpRequestException("User not found", StatusCodes.Status404NotFound);
             }
 
+            if (await _unitOfWork.BorrowRepository.CountAsync(b => b.UserId == borrowToAdd.UserId && b.HasReturnedBook != true) > 2)
+            {
+                throw new BadHttpRequestException("User has reached the maximum number of borrows!");
+            }
+
+            if (bookLibrary.Quantity < 1)
+            {
+                throw new BadHttpRequestException("All available books have been borrowed!", StatusCodes.Status400BadRequest);
+            }
+
             var newBorrow = _mapper.Map<Borrow>(borrowToAdd);
 
             newBorrow.BorrowingDate = _dateTimeProvider.UtcNow;
             newBorrow.ReturnDate = newBorrow.BorrowingDate.AddDays(14);
-            newBorrow.HasReturnedBook = true;
+            newBorrow.HasReturnedBook = null;
+            newBorrow.WasExtensionRequested = false;
 
             _unitOfWork.BorrowRepository.Add(newBorrow);
+            _unitOfWork.BookLibraryRepository.Update(bookLibrary);
 
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task UpdateBorrow(int id, BorrowPutDTO borrowToUpdate)
+        public async Task UpdateBorrowingAsync(int id, BorrowPutDTO borrowToUpdate)
         {
             var existingBorrow = await _unitOfWork.BorrowRepository.FindByIdAsync(id);
 
@@ -80,7 +102,7 @@ namespace LibroMind_BE.Services.Implementations
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task ExtendBorrow(int id)
+        public async Task AcceptBorrowingAsync(int id)
         {
             var existingBorrow = await _unitOfWork.BorrowRepository.FindByIdAsync(id);
 
@@ -89,14 +111,103 @@ namespace LibroMind_BE.Services.Implementations
                 throw new BadHttpRequestException("Borrow not found", StatusCodes.Status404NotFound);
             }
 
+            if (existingBorrow.HasReturnedBook != null)
+            {
+                throw new BadHttpRequestException("Borrowing has already been accepted or was returned!", StatusCodes.Status404NotFound);
+            }
+
+            if (await _unitOfWork.BookLibraryRepository.FindByIdAsync(existingBorrow.BookLibraryId) is not BookLibrary existingBookLibrary)
+            {
+                throw new BadHttpRequestException("BookLibrary from borrow not found", StatusCodes.Status404NotFound);
+            }
+
+            if (existingBookLibrary.Quantity < 1)
+            {
+                throw new BadHttpRequestException("All available books have been borrowed!", StatusCodes.Status400BadRequest);
+            }
+
+            existingBookLibrary.Quantity--;
+            existingBorrow.HasReturnedBook = false;
+
+            _unitOfWork.BorrowRepository.Update(existingBorrow);
+            _unitOfWork.BookLibraryRepository.Update(existingBookLibrary);
+
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task ExtendBorrowingAsync(int id)
+        {
+            var existingBorrow = await _unitOfWork.BorrowRepository.FindByIdAsync(id);
+
+            if (existingBorrow is null)
+            {
+                throw new BadHttpRequestException("Borrow not found", StatusCodes.Status404NotFound);
+            }
+
+            if (existingBorrow.WasExtensionRequested == false)
+            {
+                throw new BadHttpRequestException("Extension was not requested or has already been granted!", StatusCodes.Status404NotFound);
+            }
+
             existingBorrow.ReturnDate = existingBorrow.ReturnDate.AddDays(14);
+            existingBorrow.WasExtensionRequested = false;
 
             _unitOfWork.BorrowRepository.Update(existingBorrow);
 
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task DeleteBorrow(int id)
+        public async Task ReturnBorrowingAsync(int id)
+        {
+            var existingBorrow = await _unitOfWork.BorrowRepository.FindByIdAsync(id);
+
+            if (existingBorrow is null)
+            {
+                throw new BadHttpRequestException("Borrowing not found", StatusCodes.Status404NotFound);
+            }
+
+            if (existingBorrow.HasReturnedBook == true)
+            {
+                throw new BadHttpRequestException("Borrowing has already been returned!", StatusCodes.Status404NotFound);
+            }
+
+            if (await _unitOfWork.BookLibraryRepository.FindByIdAsync(existingBorrow.BookLibraryId) is not BookLibrary existingBookLibrary)
+            {
+                throw new BadHttpRequestException("BookLibrary from borrowing not found", StatusCodes.Status404NotFound);
+            }
+
+            existingBookLibrary.Quantity++;
+            existingBorrow.HasReturnedBook = true;
+
+            _unitOfWork.BorrowRepository.Update(existingBorrow);
+
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task RequestExtensionForBorrowingAsync(int id)
+        {
+            var existingBorrow = await _unitOfWork.BorrowRepository.FindByIdAsync(id);
+
+            if (existingBorrow is null)
+            {
+                throw new BadHttpRequestException("Borrow not found", StatusCodes.Status404NotFound);
+            }
+
+            if (existingBorrow.WasExtensionRequested == true)
+            {
+                throw new BadHttpRequestException(
+                    "Extension for this borrowing has already been requested!",
+                    StatusCodes.Status400BadRequest);
+            }
+
+            existingBorrow.WasExtensionRequested = true;
+
+            _unitOfWork.BorrowRepository.Update(existingBorrow);
+
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task DeleteBorrowingAsync(int id)
         {
             var existingBorrow = await _unitOfWork.BorrowRepository.FindByIdAsync(id);
 
