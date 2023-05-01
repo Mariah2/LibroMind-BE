@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LibroMind_BE.Services.Implementations;
 using LibroMind_BE.Services.Interfaces;
 using LibroMind_BE.Services.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -24,14 +25,27 @@ namespace LibroMind_BE.API.Controllers
             return Ok(await _bookService.FindBooksAsync());
         }
 
-        [HttpGet("details")]
-        public async Task<IActionResult> GetBooksDetails()
+        [HttpGet("cards")]
+        public async Task<IActionResult> GetBookCards()
         {
-            return Ok(await _bookService.FindBooksDetailsAsync());
+            return Ok(await _bookService.FindBookCardsAsync());
+        }
+
+
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetBookCardsByUserId(int id)
+        {
+            return Ok(await _bookService.FindBookCardsByUserIdAsync(id));
+        }
+
+        [HttpGet("cards/library/{id}/filter-by")]
+        public async Task<IActionResult> GetBookCardsForLibraryByParam(int id, string? searchParam)
+        {
+            return Ok(await _bookService.FindBookCardsForLibraryByParamAsync(id, searchParam ?? ""));
         }
 
         [HttpGet("details/{id}")]
-        public async Task<IActionResult> GetBookDetails(int id)
+        public async Task<IActionResult> GetBookDetailsById(int id)
         {
             return Ok(await _bookService.FindBookDetailsByIdAsync(id));
         }

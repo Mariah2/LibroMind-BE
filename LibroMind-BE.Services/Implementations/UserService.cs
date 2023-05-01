@@ -48,19 +48,6 @@ namespace LibroMind_BE.Services.Implementations
             return _mapper.Map<UserProfileGetDTO>(existingUser);
         }
 
-        public async Task<IEnumerable<BookDetailsGetDTO>> FindUserBooksByIdAsync(int id)
-        {
-            var existingUser = await _unitOfWork.UserRepository.FindByIdAsync(id);
-
-            if (existingUser is null)
-            {
-                throw new BadHttpRequestException("User not found", StatusCodes.Status404NotFound);
-            }
-
-            return _mapper.Map<IEnumerable<BookDetailsGetDTO>>(
-                await _unitOfWork.BookRepository.FindUserBooksByIdAsync(id));
-        }
-
         public async Task UpdateUser(int id, UserPutDTO userToUpdate)
         {
             var existingUser = await _unitOfWork.UserRepository.FindByIdAsync(id);

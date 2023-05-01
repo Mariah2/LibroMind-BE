@@ -67,7 +67,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<LibroMindContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), op =>
+        op.CommandTimeout(120));
 });
 
 //Register UnitOfWork

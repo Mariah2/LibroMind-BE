@@ -23,9 +23,28 @@ namespace LibroMind_BE.Services.Implementations
             return _mapper.Map<IEnumerable<BookGetDTO>>(await _unitOfWork.BookRepository.FindAllAsync());
         }
 
-        public async Task<IEnumerable<BookDetailsGetDTO>> FindBooksDetailsAsync()
+        public async Task<IEnumerable<BookCardGetDTO>> FindBookCardsAsync()
         {
-            return _mapper.Map<IEnumerable<BookDetailsGetDTO>>(await _unitOfWork.BookRepository.FindBooksDetailsAsync());
+            return _mapper.Map<IEnumerable<BookCardGetDTO>>(await _unitOfWork.BookRepository.FindBookCardsAsync());
+        }
+
+        public async Task<IEnumerable<BookCardGetDTO>> FindBookCardsByUserIdAsync(int id)
+        {
+            var existingUser = await _unitOfWork.UserRepository.FindByIdAsync(id);
+
+            if (existingUser is null)
+            {
+                throw new BadHttpRequestException("User not found", StatusCodes.Status404NotFound);
+            }
+
+            return _mapper.Map<IEnumerable<BookCardGetDTO>>(
+                await _unitOfWork.BookRepository.FindBookCardsByUserIdAsync(id));
+        }
+
+        public async Task<IEnumerable<BookCardGetDTO>> FindBookCardsForLibraryByParamAsync(int id, string searchParam)
+        {
+            return _mapper.Map<IEnumerable<BookCardGetDTO>>(
+                await _unitOfWork.BookRepository.FindBookCardsForLibraryByParamAsync(id, searchParam));
         }
 
         public async Task<BookGetDTO> FindBookByIdAsync(int id)

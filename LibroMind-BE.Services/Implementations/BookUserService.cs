@@ -18,7 +18,7 @@ namespace LibroMind_BE.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<BookUserGetDTO>> FindBookUseresAsync()
+        public async Task<IEnumerable<BookUserGetDTO>> FindBookUsersAsync()
         {
             return _mapper.Map<IEnumerable<BookUserGetDTO>>(await _unitOfWork.BookUserRepository.FindAllAsync());
         }

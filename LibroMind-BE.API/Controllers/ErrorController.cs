@@ -33,7 +33,7 @@ namespace LibroMind_BE.API.Controllers
         {
             Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
 
-            if (exception?.InnerException is ValidationException validationException && validationException.Errors.Any())
+             if (exception?.InnerException is ValidationException validationException && validationException.Errors.Any())
             {
                 var modelStateDictionary = new ModelStateDictionary();
 

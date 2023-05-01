@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LibroMind_BE.DAL.Entities;
 using LibroMind_BE.DAL.Models;
 using LibroMind_BE.Services.Models;
 
@@ -10,6 +11,7 @@ namespace LibroMind_BE.Services.Profiles
         {
             CreateMap<Book, BookGetDTO>().ReverseMap();
             CreateMap<Book, BookPostDTO>().ReverseMap();
+            CreateMap<BookCard, BookCardGetDTO>().ReverseMap();
             CreateMap<Book, BookDetailsGetDTO>()
                 .ForMember(dst => dst.Author, src => src.MapFrom(b => b.Author))
                 .ForMember(dst => dst.Publisher, src => src.MapFrom(b => b.Publisher))

@@ -2,6 +2,10 @@
 {
     public class UserProfileGetDTO
     {
+        public int? AddressId { get; set; }
+
+        public int? LibraryId { get; set; }
+
         public string FirstName { get; set; } = null!;
 
         public string LastName { get; set; } = null!;

@@ -50,7 +50,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _bookLibraryService.AddBookLibrary(bookLibraryToAdd);
 
-            return Ok("BookLibrary was added successfully!");
+            return Ok();
         }
 
         [HttpPut("{id}")]
