@@ -26,7 +26,7 @@ namespace LibroMind_BE.API.Controllers
         {
             await _authenticationService.RegisterAsync(registerPost);
 
-            return StatusCode(StatusCodes.Status201Created, "Your account has successfully been created!");
+            return StatusCode(StatusCodes.Status201Created);
         }
     }
 }

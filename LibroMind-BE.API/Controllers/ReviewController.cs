@@ -46,7 +46,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _reviewService.AddReview(reviewToAdd);
 
-            return Ok("Review was added successfully!");
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -63,7 +63,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _reviewService.UpdateReview(id, reviewToUpdate);
 
-            return Ok("Review was updated successfully!");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -71,7 +71,7 @@ namespace LibroMind_BE.API.Controllers
         {
             await _reviewService.DeleteReview(id);
 
-            return Ok("Review was deleted successfully!");
+            return Ok();
         }
     }
 }

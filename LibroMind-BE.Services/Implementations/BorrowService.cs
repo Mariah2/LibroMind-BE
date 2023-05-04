@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibroMind_BE.Common.DateTimeProvider;
+using LibroMind_BE.DAL.Entities;
 using LibroMind_BE.DAL.Models;
 using LibroMind_BE.DAL.UnitOfWork;
 using LibroMind_BE.Services.Interfaces;
@@ -32,6 +33,12 @@ namespace LibroMind_BE.Services.Implementations
         public async Task<IEnumerable<BorrowingDetailsGetDTO>> FindBorrowingsByLibraryIdAsync(int libraryId)
         {
             return _mapper.Map<IEnumerable<BorrowingDetailsGetDTO>>(await _unitOfWork.BorrowRepository.FindBorrowingsByLibraryIdAsync(libraryId));
+        }
+
+        public async Task<IEnumerable<BorrowingDetailsGetDTO>> FindBorrowingsByLibraryIdAndParamAsync(int libraryId, string? searchParam)
+        {
+            return _mapper.Map<IEnumerable<BorrowingDetailsGetDTO>>(
+                await _unitOfWork.BorrowRepository.FindBorrowingsByLibraryIdAndParamAsync(libraryId, searchParam));
         }
 
         public async Task<IEnumerable<BorrowingDetailsGetDTO>> FindBorrowingsByUserIdAsync(int userId)
@@ -144,9 +151,25 @@ namespace LibroMind_BE.Services.Implementations
                 throw new BadHttpRequestException("Borrow not found", StatusCodes.Status404NotFound);
             }
 
+            if (existingBorrow.HasReturnedBook == true)
+            {
+                throw new BadHttpRequestException(
+                    "Borrow cannot be extended because book was returned!",
+                    StatusCodes.Status400BadRequest);
+            }
+
             if (existingBorrow.WasExtensionRequested == false)
             {
-                throw new BadHttpRequestException("Extension was not requested or has already been granted!", StatusCodes.Status404NotFound);
+                throw new BadHttpRequestException(
+                    "Extension was not requested or has already been granted!",
+                    StatusCodes.Status404NotFound);
+            }
+
+            if (existingBorrow.ReturnDate.Subtract(_dateTimeProvider.UtcNow).TotalDays > 3)
+            {
+                throw new BadHttpRequestException(
+                    "Extension can only be approved with less than 3 days before the return date!",
+                    StatusCodes.Status400BadRequest);
             }
 
             existingBorrow.ReturnDate = existingBorrow.ReturnDate.AddDays(14);
@@ -178,6 +201,7 @@ namespace LibroMind_BE.Services.Implementations
 
             existingBookLibrary.Quantity++;
             existingBorrow.HasReturnedBook = true;
+            existingBorrow.ReturnDate = _dateTimeProvider.UtcNow;
 
             _unitOfWork.BorrowRepository.Update(existingBorrow);
 
@@ -193,10 +217,23 @@ namespace LibroMind_BE.Services.Implementations
                 throw new BadHttpRequestException("Borrow not found", StatusCodes.Status404NotFound);
             }
 
+            if (existingBorrow.HasReturnedBook == true)
+            {
+                throw new BadHttpRequestException(
+                    "Borrow cannot be extended because book was returned!",
+                    StatusCodes.Status400BadRequest);
+            }
+
             if (existingBorrow.WasExtensionRequested == true)
             {
                 throw new BadHttpRequestException(
                     "Extension for this borrowing has already been requested!",
+                    StatusCodes.Status400BadRequest);
+            }
+
+            if (existingBorrow.ReturnDate.Subtract(_dateTimeProvider.UtcNow).TotalDays > 3) {
+                throw new BadHttpRequestException(
+                    "Extension can only be requested with less than 3 days before the return date!",
                     StatusCodes.Status400BadRequest);
             }
 

@@ -57,7 +57,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _libraryService.AddLibrary(libraryToAdd);
 
-            return Ok("Library was added successfully!");
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -74,7 +74,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _libraryService.UpdateLibrary(id, libraryToUpdate);
 
-            return Ok("Library was updated successfully!");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -82,7 +82,7 @@ namespace LibroMind_BE.API.Controllers
         {
             await _libraryService.DeleteLibrary(id);
 
-            return Ok("Library was deleted successfully!");
+            return Ok();
         }
     }
 }

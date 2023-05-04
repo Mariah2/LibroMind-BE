@@ -36,6 +36,12 @@ namespace LibroMind_BE.API.Controllers
             return Ok(await _bookLibraryService.FindBookLibraryByIdAsync(id));
         }
 
+        [HttpGet("libraries/{libraryId}/books")]
+        public async Task<IActionResult> GetBookLibraryCardsByLibraryId(int libraryId)
+        {
+            return Ok(await _bookLibraryService.FindBookLibraryCardsByLibraryIdAsync(libraryId));
+        }
+
         [HttpGet("book/{bookId}/library/{libraryId}")]
         public async Task<IActionResult> GetBookLibraryByBookIdAndLibraryId(int bookId, int libraryId)
         {
@@ -73,7 +79,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _bookLibraryService.UpdateBookLibrary(id, bookLibraryToUpdate);
 
-            return Ok("BookLibrary was updated successfully!");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -81,7 +87,7 @@ namespace LibroMind_BE.API.Controllers
         {
             await _bookLibraryService.DeleteBookLibrary(id);
 
-            return Ok("BookLibrary was deleted successfully!");
+            return Ok();
         }
     }
 }

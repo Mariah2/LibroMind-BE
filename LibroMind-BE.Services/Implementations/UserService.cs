@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LibroMind_BE.DAL.Models;
 using LibroMind_BE.DAL.UnitOfWork;
 using LibroMind_BE.Services.Interfaces;
 using LibroMind_BE.Services.Models;
@@ -57,7 +58,10 @@ namespace LibroMind_BE.Services.Implementations
                 throw new BadHttpRequestException("User not found", StatusCodes.Status404NotFound);
             }
 
-            _mapper.Map(userToUpdate, existingUser);
+            var updatedUser = _mapper.Map<User>(userToUpdate);
+
+            updatedUser.AddressId = existingUser.AddressId;
+            updatedUser.LibraryId = existingUser.LibraryId;
 
             _unitOfWork.UserRepository.Update(existingUser);
 

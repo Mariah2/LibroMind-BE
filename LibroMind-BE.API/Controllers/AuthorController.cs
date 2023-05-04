@@ -45,7 +45,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _authorService.AddAuthor(authorToAdd);
 
-            return Ok("Author was added successfully!");
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -62,7 +62,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _authorService.UpdateAuthor(id, authorToUpdate);
 
-            return Ok("Author was updated successfully!");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -70,7 +70,7 @@ namespace LibroMind_BE.API.Controllers
         {
             await _authorService.DeleteAuthor(id);
 
-            return Ok("Author was deleted successfully!");
+            return Ok();
         }
     }
 }

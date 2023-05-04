@@ -70,7 +70,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _bookService.AddBook(bookToAdd);
 
-            return Ok("Book was added successfully!");
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -87,7 +87,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _bookService.UpdateBook(id, bookToUpdate);
 
-            return Ok("Book was updated successfully!");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -95,7 +95,7 @@ namespace LibroMind_BE.API.Controllers
         {
             await _bookService.DeleteBook(id);
 
-            return Ok("Book was deleted successfully!");
+            return Ok();
         }
     }
 }

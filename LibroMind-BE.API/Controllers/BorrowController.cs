@@ -36,6 +36,12 @@ namespace LibroMind_BE.API.Controllers
             return Ok(await _borrowService.FindBorrowingsByLibraryIdAsync(libraryId));
         }
 
+        [HttpGet("libraries/{libraryId}/filter")]
+        public async Task<IActionResult> GetBorrowingsByLibraryIdAndParam(int libraryId, string? searchParam)
+        {
+            return Ok(await _borrowService.FindBorrowingsByLibraryIdAndParamAsync(libraryId, searchParam));
+        }
+
         [HttpGet("users/{userId}")]
         public async Task<IActionResult> GetBorrowingsByUserId(int userId)
         {

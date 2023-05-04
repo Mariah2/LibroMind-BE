@@ -38,6 +38,11 @@ namespace LibroMind_BE.Services.Implementations
             return _mapper.Map<BookLibraryGetDTO>(existingBookLibrary);
         }
 
+        public async Task<IEnumerable<BookLibraryCardGetDTO>> FindBookLibraryCardsByLibraryIdAsync(int libraryId)
+        {
+            return _mapper.Map<IEnumerable<BookLibraryCardGetDTO>>(await _unitOfWork.BookLibraryRepository.FindBookLibraryCardsByLibraryIdAsync(libraryId));
+        }
+
         public async Task<BookLibraryGetDTO> FindBookLibraryByBookIdAndLibraryIdAsync(int bookId, int libraryId)
         {
             var existingBookLibrary = await _unitOfWork.BookLibraryRepository.FindBookLibraryByBookIdAndLibraryIdAsync(bookId, libraryId);

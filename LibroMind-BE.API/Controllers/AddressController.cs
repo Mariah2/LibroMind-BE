@@ -44,7 +44,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _addressService.AddAddress(addressToAdd);
 
-            return Ok("Address was added successfully!");
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -61,7 +61,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _addressService.UpdateAddress(id, addressToUpdate);
 
-            return Ok("Address was updated successfully!");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -69,7 +69,7 @@ namespace LibroMind_BE.API.Controllers
         {
             await _addressService.DeleteAddress(id);
 
-            return Ok("Address was deleted successfully!");
+            return Ok();
         }
     }
 }

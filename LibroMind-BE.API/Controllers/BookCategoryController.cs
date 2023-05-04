@@ -45,7 +45,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _bookCategoryService.AddBookCategory(bookCategoryToAdd);
 
-            return Ok("BookCategory was added successfully!");
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -62,7 +62,7 @@ namespace LibroMind_BE.API.Controllers
 
             await _bookCategoryService.UpdateBookCategory(id, bookCategoryToUpdate);
 
-            return Ok("BookCategory was updated successfully!");
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -70,7 +70,7 @@ namespace LibroMind_BE.API.Controllers
         {
             await _bookCategoryService.DeleteBookCategory(id);
 
-            return Ok("BookCategory was deleted successfully!");
+            return Ok();
         }
     }
 }
